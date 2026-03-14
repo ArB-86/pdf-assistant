@@ -171,8 +171,5 @@ pdf-assistant/
 
 ---
 
-## 👤 Author
-
-**Your Name** — [GitHub](https://github.com/YOUR_USERNAME) · [LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
-
+## 👤 ARYA BHAWSAR
 *3rd Year B.Tech CSE Student*
