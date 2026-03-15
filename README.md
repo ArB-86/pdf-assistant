@@ -1,66 +1,147 @@
 # Intelligent PDF Assistant
 
-> Ask questions about your PDF documents in plain language and get accurate answers with source references — powered by Retrieval Augmented Generation (RAG).
+The Intelligent PDF Assistant is an AI based application that allows users to upload PDF documents and ask questions about their content in natural language. The system reads the uploaded PDFs, finds the most relevant information, and generates answers using a Retrieval Augmented Generation (RAG) approach.
+
+Unlike traditional chatbots, the system does not rely on general knowledge. Instead, it retrieves information directly from the uploaded documents and provides answers along with the source file and page number.
 
 ---
 
-## What It Does
+## Objective
 
-Searching information inside large PDFs (books, research papers, manuals, notes) is slow and inefficient. Generic AI chatbots often provide general answers that are not based on *your* documents.
+Searching for information inside large documents such as books, research papers, reports, or manuals can be time consuming. Users often need to read many pages to find a small piece of information.
 
-This project solves that problem. Upload any PDF, ask a question, and receive an answer with exact source citations from the document.
+The objective of this project is to build an intelligent assistant that can:
+
+- Upload and process multiple PDF documents
+- Understand user questions written in natural language
+- Retrieve the most relevant information from the documents
+- Generate accurate answers based on document content
+- Provide source references such as file name and page number
 
 ---
 
 ## Technology Stack
 
-| Layer            | Technology                                 |
-| ---------------- | ------------------------------------------ |
-| Language         | Python 3.10                                |
-| UI Framework     | Streamlit                                  |
-| PDF Parsing      | PyPDF2                                     |
-| ML Embeddings    | Sentence Transformers (`all-MiniLM-L6-v2`) |
-| Vector Search    | scikit-learn (Cosine Similarity) + NumPy   |
-| LLM / AI         | Groq Cloud (Llama 3.1 8B Instant)          |
-| Environment      | python-dotenv                              |
-| Containerization | Docker                                     |
+Programming Language  
+Python
+
+User Interface  
+Streamlit
+
+PDF Processing  
+PyPDF2
+
+Embedding Model  
+Sentence Transformers (all-MiniLM-L6-v2)
+
+Vector Similarity Search  
+Scikit Learn Cosine Similarity
+
+Numerical Computation  
+NumPy
+
+Large Language Model  
+Groq API using Llama 3.1
+
+Environment Management  
+Python Dotenv
 
 ---
 
-## Getting Started
+## How the System Works
 
-### Run Locally
+The system follows a Retrieval Augmented Generation pipeline.
 
-**1. Clone the repository**
+### 1. Document Processing
+Users upload one or more PDF files. The system extracts text from each page of the documents.
+
+### 2. Text Chunking
+The extracted text is divided into smaller chunks of approximately 300 words with a small overlap to preserve context.
+
+### 3. Embedding Generation
+Each text chunk is converted into a numerical vector representation using the Sentence Transformer model.
+
+### 4. Vector Index Creation
+All chunk vectors are stored in memory to create a searchable semantic index.
+
+### 5. Question Processing
+When a user asks a question, the question is also converted into an embedding vector.
+
+### 6. Semantic Retrieval
+Cosine similarity is used to compare the question vector with all document vectors. The most relevant chunks are retrieved.
+
+### 7. Answer Generation
+The retrieved chunks and the user question are sent to the language model. The model generates the final answer based only on the provided document context.
+
+---
+
+## Project Structure
+
+app.py  
+Main Streamlit application that handles the user interface, file uploads, question input, and overall pipeline.
+
+pdf_processor.py  
+Extracts text from PDF files and splits the text into smaller chunks.
+
+vector_search.py  
+Creates embeddings for text chunks and performs semantic similarity search.
+
+qa_engine.py  
+Handles the interaction with the language model and generates answers.
+
+requirements.txt  
+Contains all required Python dependencies for the project.
+
+Dockerfile  
+Used for containerizing the application.
+
+README.md  
+Documentation for the project.
+
+---
+
+## Key Features
+
+- Upload multiple PDF documents
+- Ask questions in natural language
+- Semantic search using embeddings
+- Answers generated from document content
+- Source citation with file name and page number
+- Interactive question answering interface
+- Relevance score for retrieved text chunks
+
+---
+
+## Installation and Setup
+
+### Step 1 Clone the repository
 
 ```
-git clone https://github.com/YOUR_USERNAME/pdf-assistant.git
+git clone https://github.com/yourusername/pdf-assistant.git
 cd pdf-assistant
 ```
 
-**2. Install dependencies**
+### Step 2 Install dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
-**3. Configure API key**
+### Step 3 Add API key
 
-Create a `.env` file in the root directory:
+Create a file named `.env` and add your API key:
 
 ```
 GROQ_API_KEY=your_api_key_here
 ```
 
-You can obtain a free API key from Groq Cloud.
-
-**4. Run the application**
+### Step 4 Run the application
 
 ```
 streamlit run app.py
 ```
 
-Then open:
+### Step 5 Open the application in your browser
 
 ```
 http://localhost:8501
@@ -68,48 +149,27 @@ http://localhost:8501
 
 ---
 
-### Run with Docker
+## Future Improvements
 
-Build the container:
-
-```
-docker build -t pdf-assistant .
-```
-
-Run the container:
-
-```
-docker run -p 8501:8501 -e GROQ_API_KEY=your_key_here pdf-assistant
-```
+- Support for additional document formats such as Word and text files
+- Integration with vector databases such as FAISS or ChromaDB
+- Support for larger document collections
+- User authentication system
+- Export answers to PDF or text format
+- Multi language document support
 
 ---
 
-## Features
+## References
 
-* Upload and analyze multiple PDFs
-* Semantic search using vector embeddings
-* Answers with exact source citations
-* Chat-style question answering
-* Relevance scoring for retrieved content
-* Clean interactive UI built with Streamlit
-* Fast responses using Groq inference
+RAG Paper  
+https://arxiv.org/abs/2005.11401
 
----
+Sentence Transformers  
+https://www.sbert.net
 
-## How It Works
+Streamlit Documentation  
+https://docs.streamlit.io
 
-1. **PDF Processing**
-
-   * Text is extracted from uploaded PDFs.
-   * Content is split into overlapping chunks for better context.
-
-2. **Embedding Generation**
-
-   * Each chunk is converted into a vector embedding using a Sentence Transformer model.
-
-3. **Semantic Retrieval**
-
-   * User questions are converted into embeddings.
-   * Cosine similarity finds the most relevant document chunks.
-
-4. **Answer Gener**
+Groq API Documentation  
+https://console.groq.com/docs
